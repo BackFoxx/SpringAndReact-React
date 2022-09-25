@@ -1,24 +1,36 @@
 import { API_BASE_URL } from "../app-config";
+import axios from "axios"
 
 export function call(api, method, request) {
-    let options = {
-        headers: new Headers({
+    const option = {
+        headers: {
             "Content-Type": "application/json",
-        }),
+        },
         url: API_BASE_URL + api,
         method: method,
-    };
-    if (request) {
-        options.body = JSON.stringify(request);
+        data: request
     }
 
-    return fetch(options.url, options)
-        .then((response) => response.json()
-        .then((json) => {
-            if (!response.ok) {
-                return Promise.reject(json);
-            }
-            return json;
-        })
-        );
+    return axios(option)
+    .then((response) => {
+        console.log(response);
+        return response;
+    })
+    .catch((error) => {
+        console.log(error.response.status);
+        if (error.response.status === 403) {
+            window.location.href = "/login"
+        }
+        return Promise.reject(error);
+    })
 }
+
+export function signin(userDTO) {
+    return call("/auth/signin", "POST", userDTO).then((response) => {
+      if (response.data.token) {
+        // token이 존재하는 경우 Todo 화면으로 리디렉트
+        alert("저장된 토큰 : " + response.data.token);
+        window.location.href = "/";
+      }
+    });
+  }
