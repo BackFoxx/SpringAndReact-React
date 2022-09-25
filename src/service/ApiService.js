@@ -11,6 +11,11 @@ export function call(api, method, request) {
         data: request
     }
 
+    const accessToken = localStorage.getItem("ACCESS_TOKEN");
+    if (accessToken && accessToken !== null) {
+        option.headers["Authorization"] = "Bearer " + accessToken;
+    }
+
     return axios(option)
     .then((response) => {
         console.log(response);
@@ -29,7 +34,7 @@ export function signin(userDTO) {
     return call("/auth/signin", "POST", userDTO).then((response) => {
       if (response.data.token) {
         // token이 존재하는 경우 Todo 화면으로 리디렉트
-        alert("저장된 토큰 : " + response.data.token);
+        localStorage.setItem("ACCESS_TOKEN", response.data.token);
         window.location.href = "/";
       }
     });
