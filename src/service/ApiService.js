@@ -18,8 +18,7 @@ export function call(api, method, request) {
 
     return axios(option)
     .then((response) => {
-        console.log(response);
-        return response;
+        return response.data;
     })
     .catch((error) => {
         console.log(error.response.status);
@@ -32,10 +31,19 @@ export function call(api, method, request) {
 
 export function signin(userDTO) {
     return call("/auth/signin", "POST", userDTO).then((response) => {
-      if (response.data.token) {
+      if (response.token) {
         // token이 존재하는 경우 Todo 화면으로 리디렉트
-        localStorage.setItem("ACCESS_TOKEN", response.data.token);
+        localStorage.setItem("ACCESS_TOKEN", response.token);
         window.location.href = "/";
       }
     });
+  }
+
+  export function signout() {
+    localStorage.setItem("ACCESS_TOKEN", null);
+    window.location.href = "/login";
+  }
+
+  export function signup(userDTO) {
+    return call("/auth/signup", "POST", userDTO);
   }
