@@ -28,9 +28,11 @@ class App extends React.Component {
     /* 2. componentDidMount에서 todo리스트를 가져오는 
     GET 리퀘스트가 성공적으로 리턴하는 경우 loading을 false로 고친다. 
     더 이상 로딩중이 아니라는 뜻이다. */
-    call("/todo", "GET", null).then((response) =>
-      this.setState({ items: response.data, loading: false })
-    );
+    // call("/todo", "GET", null).then((response) =>
+    //   this.setState({ items: response.data, loading: false })
+    // );
+
+    console.log("health");
   }
 
   add = (item) => {
